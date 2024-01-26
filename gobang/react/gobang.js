@@ -3,6 +3,7 @@ var body = document.getElementsByTagName('body')[0];
 class Gobang extends React.Component {
 	constructor(props) {
 		super(props);
+		this.props = props.data;
 		this.state = {
 			color: 'white',           // 'white'代表白字，'black'代表黑子
 			wins: [],
@@ -10,22 +11,26 @@ class Gobang extends React.Component {
 			backWins_white: [],
 			backWins_black: [],
 			isShow: false,
-			isInitial: false
+			isRepeat: new Map()   //判断此处是否已落子
 		};
 		this.Click = this.Click.bind(this);
 		this.ObtainCoords = this.ObtainCoords.bind(this);
 		this.Close = this.Close.bind(this);
+		this.InitialGobang = this.InitialGobang.bind(this);
 	};
 	componentDidMount() {
+		this.InitialGobang();
+	};
+	InitialGobang() {
 		// 绘制棋盘(20*20)
 		var canvas = document.getElementById('gobang');
 		var cxt = canvas.getContext('2d');
 
 		cxt.strokeStyle = 'black';
-		cxt.rect(15, 15, 570, 570)  // rect(x, y, width, height)		
-		cxt.stroke()
+		cxt.rect(15, 15, 570, 570); // rect(x, y, width, height)		
+		cxt.stroke();
 
-		for (var i = 1; i <= 18; i++) {  //绘制竖线
+		for (var i = 1; i <= 18; i++) { //绘制竖线
 			cxt.beginPath();
 			cxt.moveTo(15 + 30 * i, 15);
 			cxt.lineTo(15 + 30 * i, 585);
@@ -33,7 +38,7 @@ class Gobang extends React.Component {
 			cxt.strokeStyle = 'black';
 		};
 
-		for (var i = 1; i <= 18; i++) {  //绘制横线
+		for (var i = 1; i <= 18; i++) { //绘制横线
 			cxt.beginPath();
 			cxt.moveTo(15, 15 + 30 * i);
 			cxt.lineTo(585, 15 + 30 * i);
@@ -50,7 +55,8 @@ class Gobang extends React.Component {
 			};
 		};
 
-		var number = 0;  //赢法索引
+		var number = 0; //赢法索引
+
 		//横线赢
 		for (var i = 0; i < 20; i++) {
 			for (var j = 0; j <= 15; j++) {
@@ -103,7 +109,9 @@ class Gobang extends React.Component {
 		});
 
 		canvas = null;
-	};
+	}
+
+
 	ObtainCoords(dom, event) {  // 获取鼠标点击位置坐标
 		var x = event.clientX;
 		var y = event.clientY;
@@ -142,80 +150,80 @@ class Gobang extends React.Component {
 		var coords = this.ObtainCoords(target, e);
 		if (coords !== null) {
 			// 点击生成圆形，并填充颜色
-			var color = this.state.color;
-			var x = coords[0] + 15;
-			var y = coords[1] + 15;
-			var cxt = target.getContext('2d');
-
-			cxt.beginPath();
-			cxt.strokeStyle = 'transparent';
-			cxt.fillStyle = color;
-			cxt.arc(x, y, 10, 0, 360 * Math.PI / 180);
-			cxt.closePath();
-			cxt.stroke();
-			cxt.fill();
-
-			//初始化state中的backWins数组
-			var index_X = parseInt((x - 15) / 30);
-			var index_Y = parseInt((y - 15) / 30);
-			var backWins_white = this.state.backWins_white;
-			var backWins_black = this.state.backWins_black;
-			var win_num = this.state.win_num;
-			var wins = this.state.wins;
+			var isRepeat = this.state.isRepeat;
 			var isShow = this.state.isShow;
-			for (var i = 0; i < win_num; i++) {
-				if (wins[index_Y][index_X][i]) {
-					if (color == 'white') {
-						backWins_white[i] += 1;
-					} else {
-						backWins_black[i] += 1;
+			if (!isRepeat.has(coords.toString()) && !isShow) {    //判断此处是否已落子，并且是否一方已胜出
+				var color = this.state.color;
+				var x = coords[0] + 15;
+				var y = coords[1] + 15;
+				var cxt = target.getContext('2d');
+
+				cxt.beginPath();
+				cxt.strokeStyle = 'transparent';
+				cxt.fillStyle = color;
+				cxt.arc(x, y, 10, 0, 360 * Math.PI / 180);
+				cxt.closePath();
+				cxt.stroke();
+				cxt.fill();
+
+				//初始化state中的backWins数组
+				var index_X = parseInt((x - 15) / 30);
+				var index_Y = parseInt((y - 15) / 30);
+				var backWins_white = this.state.backWins_white;
+				var backWins_black = this.state.backWins_black;
+				var win_num = this.state.win_num;
+				var wins = this.state.wins;
+				var isShow = this.state.isShow;
+				for (var i = 0; i < win_num; i++) {
+					if (wins[index_Y][index_X][i]) {
+						if (color == 'white') {
+							backWins_white[i] += 1;
+						} else {
+							backWins_black[i] += 1;
+						};
+					};
+					if (backWins_white[i] == 5 || backWins_black[i] == 5) {
+						isShow = true;
+						this.setState({
+							backWins_white: backWins_white,
+							backWins_black: backWins_black,
+							isShow: isShow
+						});
+						return
 					};
 				};
-				if (backWins_white[i] == 5 || backWins_black[i] == 5) {
-					isShow = true;
-					this.setState({
-						backWins_white: backWins_white,
-						backWins_black: backWins_black,
-						isShow: isShow
-					});
-					return
-				};
-			};
 
-			this.setState({
-				color: color == 'white' ? 'black' : 'white',
-				backWins_white: backWins_white,
-				backWins_black: backWins_black,
-				isShow: isShow
-			});
+				this.setState({
+					color: color == 'white' ? 'black' : 'white',
+					backWins_white: backWins_white,
+					backWins_black: backWins_black,
+					isShow: isShow
+				});
+				isRepeat.set(coords.toString(), coords);
+				this.setState({ isRepeat: isRepeat });
+			};
 		};
 	};
 	Close(e) {
-		// 关闭弹窗，重新加载网页
-		var isShow = this.state.isShow;
-		var isInitial = this.state.isInitial;
-		var time1 = setTimeout(() => {
-			this.setState({
-				isShow: !isShow,
-				isInitial: !isInitial
-			});
-			time1 = null;
+		// 重新渲染棋盘
+		var time = setTimeout(() => {
+			this.props.data();
+			clearTimeout(time);
 		}, 0);
-		location.reload();
+		this.props.data();
 	};
 	render() {
 		var click = this.Click;
 		var isShow = this.state.isShow;
 		var color = this.state.color;
 		var close = this.Close;
-		var isInitial = this.state.isInitial;
 		var data = {
 			color: color,
 			isShow: isShow,
 			close: close
 		};
 		return (
-			<div id="container" style={{ display: isInitial ? 'none' : 'block' }}>
+			<div id="container">
 				<canvas id="gobang" width='600' height='600' onClick={click}></canvas>
 				<Message data={data} />
 			</div>
@@ -223,23 +231,39 @@ class Gobang extends React.Component {
 	};
 };
 
+function GobangComponent(props) {
+	const [isRender, setIsRender] = React.useState(true);
+	let callback = () => setIsRender(isRender => !isRender);
+	if (!isRender) {
+		return null;
+	} else {
+		return (
+			<Gobang data={callback} />
+		);
+	};
+}
+
 function Message(props) {
+	var RenderGobang = () => {
+		var close = props.data.close;
+		close();
+	};
 	return (
-		<div id="message" style={{ display: props.data.isShow ? 'block' : 'none' }} onClick={props.data.close}>
+		<div id="message" style={{ display: props.data.isShow ? "block" : "none" }}>
 			<div class='menu'>
 				<p>信息</p>
-				<div>&times;</div>
+				<div onClick={RenderGobang}>&times;</div>
 			</div>
 			<div class='context'>
 				<p>{props.data.color == "white" ? '白方胜' : '黑方胜'}</p>
-				<button onClick={props.data.close}>确定</button>
+				<button onClick={RenderGobang}>确定</button>
 			</div>
 		</div>
 	);
 };
 
 const gobang = (
-	<Gobang />
+	<GobangComponent />
 );
 
 ReactDOM.render(gobang, body);
