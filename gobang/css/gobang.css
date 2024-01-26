@@ -1,0 +1,80 @@
+html,
+body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+html,
+body,
+#container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#gobang {
+	background-color: rgba(220, 185, 150, 1);
+}
+
+#message {
+	width: 300px;
+	height: 160px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -80px;
+	margin-left: -150px;
+	background-color: white;
+	overflow: hidden;
+}
+
+.menu {
+	height: 20px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid darkgrey;
+	padding: 10px;
+	font-size: 15px;
+
+}
+
+.menu>div {
+	font-size: 24px;
+	color: #aaa;
+	font-weight: bold;
+}
+
+.menu>div:hover,
+.menu>div:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.context {
+	height: 100%;
+	margin-top: -36px;
+	padding: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.context>button {
+	width: 50px;
+	background-color: deepskyblue;
+	border: 0px;
+	color: white;
+	font-size: 15px;
+	margin-top: 80px;
+	margin-right: 5px;
+}
+
+.context>button:hover,
+.context>button:focus {
+	border: 1px solid black;
+}
