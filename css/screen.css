@@ -1,0 +1,129 @@
+#screen {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	/* background: url(../img/screen.jpg); */
+	/* background: -webkit-cross-fade(url(../img/screen.jpg), url(../img/opacity.jpg), 98%); */
+	background-size: 100% 100%;
+	border-radius: 0px;
+}
+
+.login {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	text-align: center;
+}
+
+.login>img {
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -230px;
+	margin-left: -75px;
+	border-radius: 50%;
+}
+
+.login>h2 {
+	width: 100%;
+	height: 100px;
+	color: white;
+	font-size: 20px;
+	font-weight: normal;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -70px;
+	margin-left: -50%;
+}
+
+.login>div {
+	width: 100%;
+	height: 150px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -75px;
+	margin-left: -50%;
+	/* border: 1px solid white; */
+}
+
+.lock>input {
+	width: 240px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: 50px;
+	margin-left: -120px;
+	border: 1px solid white;
+	background-color: rgb(19, 37, 51);
+	color: aliceblue;
+}
+
+/* 设置表单提示文字的颜色 */
+input::-webkit-input-placeholder {
+	/* WebKit browsers */
+	color: aliceblue;
+}
+
+input:-moz-placeholder {
+	/* Mozilla Firefox 4 to 18 */
+	color: aliceblue;
+}
+
+input::-moz-placeholder {
+	/* Mozilla Firefox 19+ */
+	color: aliceblue;
+}
+
+input:-ms-input-placeholder {
+	/* Internet Explorer 10+ */
+	color: aliceblue;
+}
+
+.password_error {
+	margin-top: 50px;
+	color: aliceblue;
+	text-align: center;
+}
+
+.password_error>label {
+	font-size: 15px;
+	display: inline-block;
+	margin-top: 30px;
+}
+
+.password_error>button {
+	width: 80px;
+	height: 30px;
+	font-size: 15px;
+	color: aliceblue;
+	background-color: gray;
+	border-radius: 8px;
+	border: 1px solid white;
+	margin-top: 30px;
+}
+
+#password_reset {
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: 30px;
+	margin-left: -50%;
+	color: aliceblue;
+	font-size: 15px;
+}
+
+#Success_Log {
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: 30px;
+	margin-left: -50%;
+	color: aliceblue;
+	font-size: 30px;
+}

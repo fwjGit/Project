@@ -1,0 +1,7 @@
+.opacity {
+	background: -webkit-cross-fade(url(../img/screen.jpg), url(../img/opacity.jpg), 98%);
+}
+
+.imgShow {
+	background: url(../img/screen.jpg);
+}
