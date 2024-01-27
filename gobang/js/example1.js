@@ -4,14 +4,13 @@
 // isPrime >> 判断n是否质数
 function Sum(n) {
 	// Sum >> 输入n，并调用Recursion函数递归计算
-	var zhishu = Array(n + 1).fill(true);
-	zhishu[0] = false;
-	zhishu[1] = false;
+	var zhiShu = Array(n + 1).fill(true);
+	zhiShu[0] = false;
+	zhiShu[1] = false;
 	var result = 0;
 	var index = 2;
-	Recursion(zhishu, result, index);
+	Recursion(zhiShu, result, index);
 };
-
 function Recursion(list, sum, cur_index) {
 	// Recursion >> 递归计算质数之和
 	var length = list.length;
@@ -23,8 +22,8 @@ function Recursion(list, sum, cur_index) {
 		cur_index++;
 		Recursion(list, sum, cur_index);
 	} else {
-		var isprime = isPrime(cur_index);
-		if (!isprime) {
+		var is_prime = isPrime(cur_index);
+		if (!is_prime) {
 			list[cur_index] = false;
 		} else {
 			sum += cur_index;
@@ -41,7 +40,6 @@ function Recursion(list, sum, cur_index) {
 		Recursion(list, sum, cur_index);
 	};
 };
-
 function isPrime(n) {
 	// isPrime >> 判断n是否质数
 	// 任意一个数，若均不被2至sqrt(n)之内的正整数整除，则这个数为质数
