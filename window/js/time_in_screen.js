@@ -14,4 +14,16 @@ function time() {
 	child_nodes = null;
 	time_node = null;
 };
-setInterval(time, 1000);
+(function () {
+	var time1 = setInterval(() => {
+		var time_in_screen = document.getElementsByClassName('time_in_screen')[0];
+		if (time_in_screen==undefined) {
+			clearInterval(time1);
+		}else {
+			time();
+		};
+		
+		time_in_screen = null;
+	}, 1000);
+
+})();

@@ -1,7 +1,7 @@
 var login = document.getElementsByClassName("login")[0];
 var div = document.createElement('div');
 login.appendChild(div);
-var login = login.children[2];
+login = login.children[2];
 
 function FailLog(props) {
 	return (
@@ -55,20 +55,23 @@ class LoginComponent extends React.Component {
 		var value = node_dom.value;
 		const password_list = this.state.password_list;
 		if (Object.values(password_list).includes(value)) {
-			var time1 = setTimeout(() => this.setState({ isLock: false }));
+			var time1 = setTimeout(() => {
+				this.setState({ isLock: false });
+				clearTimeout(time1);
+			},0);
 			var time2 = setTimeout(() => {
 				//var current=document.getElementsByClassName('login')[0];
 				var screen = document.getElementById("screen");
 				var children = screen.children;
-				children[1].classList.add('hidden');
+				children[0].classList.add('hidden');
+				children[1].classList.remove('hidden');
 				children[2].classList.remove('hidden');
-				children[3].classList.remove('hidden');
+				screen.removeChild(children[0]);
 
 				children = null;
 				screen = null;
+				clearTimeout(time2);
 			}, 100);
-			time1 = null;
-			time2 = null;
 		} else {
 			this.setState({ isLock: true });
 			this.Hidden(e);
@@ -125,4 +128,6 @@ const loginReact = (
 	</span>
 );
 ReactDOM.render(loginReact, login);
+
+div=null;
 login = null;

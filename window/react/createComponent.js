@@ -56,7 +56,12 @@ function CreateFolderComponent(props) {
 		folder_context.innerHTML = null;
 		folder_context.appendChild(table);
 		props.data.click([length, id]);
+
 		folder_context = null;
+		table = null;
+		tr = null;
+		td = null;
+		th = null;
 	};
 	return (
 		<div id={props.data.id} class={props.data.class} onClick={click}>
@@ -65,27 +70,6 @@ function CreateFolderComponent(props) {
 		</div>
 	);
 };
-
-class CreateInput extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			context: {
-				'picture_image': '新建 JPG 图像.jpg',
-				'Word': '新建 Microsoft Word 文档.docx',
-				'PowerPoint': "新建 Microsoft PowerPoint 演示文稿.pptx",
-				'excel': '新建 Microsoft Excel 工作表.xlsx',
-				'text': "新建 文本文档.txt"
-			}
-		};
-	}
-	render() {
-		var name = props.name;
-		var context = this.state.context[name];
-		console.log(name)
-		return <input value={context} />
-	}
-}
 
 class FolderComponent extends React.Component {
 	constructor(props) {
@@ -192,6 +176,7 @@ class FolderComponent extends React.Component {
 		} else {
 			target_context.classList.add('hidden');
 		};
+
 		target_context = null;
 	}
 	CreateTable(e) {
@@ -236,7 +221,12 @@ class FolderComponent extends React.Component {
 		folder_context.innerHTML = null;
 		folder_context.appendChild(table);
 		this.setState({ number: length });
+
 		folder_context = null;
+		table = null;
+		tr = null;
+		td = null;
+		th = null;
 	}
 	CreateFile(e) {
 		var target = e.currentTarget;
@@ -274,8 +264,9 @@ class FolderComponent extends React.Component {
 			var create = document.getElementsByClassName('create_context')[0];
 			create.classList.add('hidden');
 			this.CreateTable();
+
+			clearTimeout(time1);
 			create = null;
-			time1 = null;
 		}, 0);
 	}
 	render() {
@@ -328,20 +319,23 @@ class FolderComponent extends React.Component {
 
 var click = function (className) {
 	var target = this.children;
-	if (target.length == 4) {
+	if (target.length == 2) {
 		var container = document.createElement('div');
 		container.className = className;
 		this.appendChild(container);
 		ReactDOM.render(<FolderComponent />, container);
+
 		container = null;
 	} else {
-		var className = target[4].className;
+		var className = target[2].className;
 		if (className.includes('hidden')) {
-			target[4].classList.remove('hidden');
+			target[2].classList.remove('hidden');
 		} else {
-			target[4].classList.add('hidden');
+			target[2].classList.add('hidden');
 		};
 	};
+
+	target = null;
 };
 
 const recycleReact = <CreateComponent data={{ id: 'recycle', class: '', title: '回收站', url: '../img/recycle.png', click: null }} />;
@@ -354,6 +348,7 @@ const dom_menu = (
 );
 ReactDOM.render(recycleReact, desktop);
 ReactDOM.render(dom_menu, menu);
+
 screen = null;
 desktop = null;
 menu = null;
