@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS test</title>
+</head>
+
+<body>
+    <script>
+        //闭包
+        function fn() {
+            let count = 0;
+            return function (example) {
+                count++;
+                if (count % 2 == 0) {
+                    return example;
+                } else {
+                    return function () {
+                        return "Old call";
+                    };
+                };
+            };
+        };
+        function example() {
+            return "Even call";
+        }
+        var test = fn();
+        console.log(test(example));
+        console.log(test(example));
+        console.log(test(example));
+        console.log(test(example));
+
+        //寄生组合式继承
+        function Vehicle(make, model) {
+            this.make = make;
+            this.model = model;
+        };
+        Vehicle.prototype.getMakeAndModel = function () {
+            return `${this.make} ${this.model}`;
+        };
+        function Car(make, model, doors) {
+            Vehicle.call(this, make, model);
+            this.doors = doors;
+        };
+        Car.prototype = Object.create(Vehicle.prototype);
+        Car.prototype.constructor = Car;
+
+        var myCar = new Car('Tom', "ABC", 4);
+
+        console.log(myCar.getMakeAndModel());  // 'Tom ABC'
+        console.log(myCar.doors);  // 4
+        console.log(myCar instanceof Car);  // true
+        console.log(myCar instanceof Vehicle);  // true
+
+        //判断__proto__
+        var Vehicle = function () {
+            console.log("hello");
+            return
+        };
+        var Car = function () { };
+        Car.prototype = Vehicle;
+        Car.prototype.constructor = Car;
+        console.log(Car.__proto__ === Function.prototype)  // true
+        console.log(Vehicle.prototype) //
+        console.log(Object.__proto__ === Function.prototype) // true
+
+        var value = Vehicle();
+        console.log(value);  //undefined
+
+        //splice、concat
+        var list = ['1', '2', '3']
+        var list2 = list.concat(['5', '4'])
+        list.splice(1, 0, '9')
+        console.log(list)
+        console.log(list2)
+
+        //检查集合元素是否可以修改
+        var set = new Set();
+        set.add(5)
+        set.add(6)
+        set.add(7)
+        for (let value of set) {
+            if (value == 5) {
+                //value=9;
+                console.log(value)
+            };
+        };
+        console.log(set)
+
+        //箭头函数this
+        const obj = {
+            sayThis: () => {
+                console.log(this);
+            }
+        };
+        obj.sayThis(); // window
+        const globalSay = obj.sayThis;
+        globalSay(); // window
+
+
+        //选择排序	
+        var data = [1, 5, 2, 6, 7, 4];
+        function order(data) {
+            for (var i = 0; i < data.length; i++) {
+                var index;
+                var max_value = data[i];
+                for (var j = i; j < data.length; j++) {
+                    if (data[j] > max_value) {
+                        max_value = data[j];
+                        index = j;
+                    };
+                };
+                var tem = data[i];
+                data[i] = max_value;
+                data[index] = tem;
+            };
+            return data;
+        };
+        console.log(order(data));
+
+        //插入排序
+        var data = [1, 5, 2, 6, 7, 4];
+        function order2(data) {
+            var result = [];
+            for (var i = 0; i < data.length; i++) {
+                if (i == 0) {
+                    result.push(data[i]);
+                } else {
+                    var index = 0;
+                    for (var j = 0; j < result.length; j++) {
+                        if (result[j] < data[i]) {
+                            index = j;
+                        };
+                    };
+                    result.splice(index + 1, 0, data[i]);
+                };
+            };
+            return result
+        };
+        console.log(order2(data));
+
+        //冒泡排序
+        var data = [1, 5, 2, 6, 7, 4];
+        function order3(data) {
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    try {
+                        if (data[j] > data[j + 1]) {
+                            var tem = data[j];
+                            data[j] = data[j + 1];
+                            data[j + 1] = tem;
+                        };
+                    } catch {
+                        continue;
+                    };
+                };
+            };
+            return data
+        };
+        console.log(order3(data));
+
+        // //快速排序
+        // var data=[3,5,2,6,7,4];
+        // function order4(left,right,data){
+        // 	if(left==right){
+        // 		return data
+        // 	}else{
+        // 		var i=left;
+        // 		var j=right;
+        // 		var base=data[i];
+        // 		while(left<right){
+        // 			console.log([left,right]);
+        // 			// while((data[right]>base)&&(left<right)){
+        // 			// 	console.log(right);
+        // 			// 	right--;
+        // 			// };
+        // 			// while((data[left]<base)&&(left<right)){
+        // 			// 	left++;
+        // 			// };
+        // 			// if(left<right){
+        // 			// 	var tem=data[left];
+        // 			// 	data[left]=data[right];
+        // 			// 	data[right]=tem;
+        // 			// };
+        // 		};
+        // 		var tem_2=data[left];
+        // 		data[left]=base;
+        // 		data[index]=tem_2;
+        // 		order4(i,left-1,data);
+        // 		order4(left+1,j,data);
+        // 	};
+        // };
+        // console.log(order4(0,data.length,data));
+
+        //计算重复个数
+        var data = ['a', 'b', 'c', 'a', 'c'];
+        var result = {};
+        data.map((value) => {
+            if (value in result) {
+                result[value] += 1;
+            } else {
+                result[value] = 1;
+            };
+        });
+        console.log(result);
+
+        //reduce方法计算重复元素个数
+        var data = ['a', 'b', 'c', 'a', 'c'];
+        var result = data.reduce((pre, cur) => {
+            if (cur in pre) {
+                pre[cur] += 1;
+            } else {
+                pre[cur] = 1;
+            };
+            return pre
+        }, {});
+        console.log(result);
+
+        // 实现new操作
+        Function.prototype.myNew = function (fn, ...argus) {
+            var obj = {};
+            obj.__proto__ = fn.prototype;
+            var result = fn.apply(obj, argus);
+            return result instanceof Object ? result : obj
+        };
+        function Parent(name, age) {
+            this.name = name;
+            this.age = age;
+        };
+        var children = Function.myNew(Parent, "Tom", 25);
+        console.log(children);
+
+        //链表实现
+        function newNode(value) {
+            this.data = value;
+            this.next = null;
+        };
+
+        function Table() {
+            this.head = null;
+        };
+        Table.prototype.insert = function (value, target) {
+            var new_node = new newNode(value);
+            var currentNode = this.head;
+            if (currentNode == null) {
+                this.head = { next: new_node };
+                return
+            } else {
+                while (currentNode.next) {
+                    if (currentNode.next == target) {
+                        break
+                    };
+                    currentNode = currentNode.next;
+                };
+                var tem = currentNode.next;
+                currentNode.next = new_node;
+                new_node.next = tem;
+                return
+            };
+        };
+        Table.prototype.push = function (value) {
+            var new_node = new newNode(value);
+            var currentNode = this.head;
+            if (currentNode == null) {
+                this.head = { next: new_node };
+                return
+            } else {
+                while (currentNode.next) {
+                    currentNode = currentNode.next;
+                };
+                currentNode.next = new_node;
+                return
+            };
+        };
+        Table.prototype.unshift = function (value) {
+            var new_node = new newNode(value);
+            var currentNode = this.head;
+            if (currentNode == null) {
+                this.head = { next: new_node };
+                return
+            } else {
+                var tem = currentNode.next;
+                currentNode.next = new_node;
+                new_node.next = tem;
+                return
+            };
+        };
+
+        var newTable = new Table();
+        newTable.insert('Tom', { data: 'Amy', next: null });
+        newTable.insert('Amy', { data: 'Tom', next: null });
+        newTable.push('Kike');
+        newTable.unshift('Jack');
+        console.log(newTable);
+
+        //实现bind绑定
+        Function.prototype.myBind = function (obj, arguments) {
+            var myThis = this;
+            var fn = function (args) {
+                arguments = [arguments];
+                arguments = arguments.concat([args]);
+                myThis.apply(obj, arguments);
+            };
+            return fn
+        };
+
+        function Parent(name, age) {
+            this.name = name;
+            this.age = age;
+            this.fn = function () {
+                console.log(this);
+            };
+        };
+        var object = {
+            name: "Tom",
+            age: 25,
+            foo: function (value) {
+                this.name = value;
+                console.log(this);
+            }
+        };
+        var test = object.foo.myBind(Parent);
+        test();
+        var test = Parent.bind(this, 'Tom', 20);
+        test();
+        console.log(test.fn);
+
+        //生成并填充一个0数组
+        var arr = Array(10).fill(0);
+        var dp = [];
+        for (var i = 0; i < 5; i++) {
+            dp.push(arr);
+        };
+        console.log(dp);
+
+        //手写Promise
+        class MyPromise {
+            constructor(executor) {
+                this.state = 'pending';
+                this.value = undefined;
+                this.reason = undefined;
+                this.callbacks = [];
+                this.handle = function (callback) {
+                    let { nextResolve, nextReject, onFulfilled, onRejected } = callback;
+                    if (this.state == 'fulfilled') {
+                        let nextState = onFulfilled(this.value) ? onFulfilled(this.value) : undefined;
+                        nextResolve(nextState);
+                        return;
+                    };
+                    if (this.state == 'rejected') {
+                        let nextState = onRejected(this.reason) ? onRejected(this.reason) : undefined;
+                        nextReject(nextState);
+                        return;
+                    };
+                };
+                let resolve = (value) => {
+                    if (this.state == 'pending') {
+                        this.state = 'fulfilled';
+                        this.value = value;
+                        this.callbacks.forEach((cb) => this.handle(cb));
+                    };
+                };
+                let reject = (error) => {
+                    if (this.state == 'pending') {
+                        this.state = 'rejected';
+                        this.reason = error;
+                        this.callbacks.forEach((cb) => this.handle(cb));
+                    };
+                };
+                try {
+                    executor(resolve, reject);
+                } catch (error) {
+                    reject(error);
+                };
+            };
+            then(onFulfilled, onRejected) {
+                return new MyPromise((nextResolve, nextReject) => {
+                    this.handle({ nextResolve, nextReject, onFulfilled, onRejected });
+                });
+            };
+            catch(onRejected, onFulfilled) {
+                return new MyPromise((nextResolve, nextReject) => {
+                    this.handle({ nextResolve, nextReject, onFulfilled, onRejected });
+                });
+            };
+        }
+
+        var test = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log('执行成功1');
+            }, 0);
+            resolve('resolve');
+        }).then((value) => console.log(value)).then(() => console.log(123)).catch(() => console.log(456));
+        var test1 = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                console.log('执行成功2');
+            }, 0);
+            resolve('resolve');
+        }).then((value) => console.log(value)).then(() => console.log(123)).catch(() => console.log(456));
+        console.log(test);
+        console.log(test1);
+
+        // test getPrototypeOf method
+        var a = {};
+        var b = Object.create(a);
+        console.log(b.__proto__ === a)  // true
+        console.log(Object.getPrototypeOf(b) === a)  // true
+        console.log(Object.getPrototypeOf(a) === Object.prototype)  // true
+        console.log(Function.prototype === Function.__proto__)   //true
+        console.log(Object.prototype === Function.prototype.__proto__)  //true
+        console.log(Object.prototype.__proto__ === null)  //true
+        console.log(typeof 12)  // 'number'
+        console.log(typeof typeof 12)  // 'string'
+
+        // test Promise
+        console.log("开始");
+        var test = new Promise((res, rej) => {
+            console.log("promise0");
+            res('promise1');
+            console.log('promise2');
+            res('promise2');
+        }).then((s) => { console.log(s); });
+        async function foo() {
+            console.log("foo");
+            await test;
+            console.log("await");
+        };
+        foo();
+        console.log("结束"); // 开始>promise0>promise2>foo>结束>promise1>await
+
+        // 实现add(1)(2)(3).sum()  输出6
+        function add() {
+            if (arguments.length == 1) {
+                var value = arguments[0];
+            } else if (arguments.length > 1) {
+                var value = 0;
+                for (var i = 0; i < arguments.length; i++) {
+                    value += arguments[i];
+                };
+            } else {
+                var value = 0;
+            };
+            var fn = function () {
+                if (arguments.length > 0) {
+                    for (var j = 0; j < arguments.length; j++) {
+                        value += arguments[j];
+                    };
+                };
+                fn.sum = function () {
+                    console.log(value);
+                };
+                return fn
+            };
+            return fn
+        };
+        add(1)(2)(3)(4).sum()  // 10
+
+        // 回文字符串        
+        var str1 = 'strrts';
+        function fn_str(str) {
+            var result_str = [];
+            for (var i = 0; i < str.length; i++) {
+                for (var j = i; j < str.length; j++) {
+                    var left = i;
+                    var right = j;
+                    var temp_str = str.slice(left, right + 1);
+                    var temp_reverse = temp_str.split('');
+                    temp_reverse.reverse();
+                    temp_reverse = temp_reverse.join('');
+                    if (temp_reverse === temp_str) {
+                        if (temp_reverse.length > 1) {
+                            result_str.push(temp_reverse);
+                        };
+                    };
+                };
+            };
+            console.log(result_str);
+        };
+        fn_str(str1);  // ['strrts', 'trrt', 'rr'];
+    </script>
+</body>
+
+</html>

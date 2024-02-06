@@ -42,18 +42,7 @@
 	<script type="text/babel" src="../react/login.js"></script>
 	<script type="text/babel" src="../react/createComponent.js"></script>
 	<script>
-		function add(...arguments) {
-			this.value = arguments;
-			var fn = function (...arguments) {
-				this.value.concat(arguments);
-			};
-			return fn
-		};
-		Function.prototype.sum = function () {
-			console.log(this.value);
-		};
-		console.log(add(1))
-		add(1).sum()
+		
 	</script>
 </body>
 
