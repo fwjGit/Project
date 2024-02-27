@@ -408,6 +408,7 @@
         console.log(b.__proto__ === a)  // true
         console.log(Object.getPrototypeOf(b) === a)  // true
         console.log(Object.getPrototypeOf(a) === Object.prototype)  // true
+        console.log(Function.prototype === Object.__proto__)   // true
         console.log(Function.prototype === Function.__proto__)   //true
         console.log(Object.prototype === Function.prototype.__proto__)  //true
         console.log(Object.prototype.__proto__ === null)  //true
@@ -479,7 +480,62 @@
             console.log(result_str);
         };
         fn_str(str1);  // ['strrts', 'trrt', 'rr'];
-        
+
+        // 深拷贝
+        function deepCopy(obj) {
+            var type = {
+                '[object Array]': [],
+                '[object Object]': {},
+                '[object Set]': new Set(),
+                '[object Map]': new Map(),
+            }
+            var type_obj = Object.prototype.toString.call(obj);
+            var result = type[type_obj];
+
+            if (type_obj === '[object Set]' || type_obj === '[object Map]') {
+                if (type_obj === '[object Set]') {
+                    for (var value of obj) {
+                        if (typeof value !== 'object') {
+                            result.add(value);
+                        } else {
+                            result.add(deepCopy(value));
+                        }
+                    }
+                } else {
+                    for (var value of obj) {
+                        if (typeof value[1] !== 'object') {
+                            result.set(value[0], value[1])
+                        } else {
+                            result.set(value[0], deepCopy(value[1]))
+                        }
+                    }
+                }
+            } else {
+                for (var key in obj) {
+                    if (typeof obj[key] !== 'object' || obj[key] === null) {
+                        result[key] = obj[key];
+                    } else {
+                        result[key] = deepCopy(obj[key]);
+                    }
+                }
+            }
+            return result;
+        }
+        var temp_list = [5];
+        const a = {
+            name: '名称',
+            attr: [1, 'true', false, null, undefined, '888', '文本'],
+            key: { name: '测试' },
+            set: new Set([[1], [2], [3], { key: 10, value: 11 }]),
+            map: new Map([[1, 2], [3, 4], [temp_list, [6]]])
+        }
+
+        var b = deepCopy(a);
+        b.name = '123';
+        b.key.name = '面试';
+        b.map.get(temp_list)[0] = 7;
+        console.log(a);
+        console.log(b);
     </script>
 </body>
 

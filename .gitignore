@@ -2,5 +2,10 @@
 Web_project/
 简历生成/
 /fwj.code-workspace
-h5-Dooring/
-chat/
+source/
+typescript/
+/test.js
+/test.html
+.vscode/
+webpack-demo/
+website/
